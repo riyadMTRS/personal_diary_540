@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyad's Thoughts | Digital Diary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776e6;
+            --text: #e0e0e0;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --highlight: rgba(110, 72, 170, 0.3);
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Floating Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: "DIGITAL DIARY";
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            font-size: 0.6rem;
+            color: var(--text);
+            letter-spacing: 1px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Notes Grid */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Note Card */
+        .note-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .note-header {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: white;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .note-content {
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .action-btn:hover {
+            color: white;
+        }
+
+        /* AI Resources Section */
+        .ai-resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .ai-category {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border-top: 3px solid var(--accent);
+        }
+
+        .ai-category h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-list {
+            list-style: none;
+        }
+
+        .ai-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .ai-link {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .ai-link:hover {
+            color: var(--accent);
+        }
+
+        /* Books Section */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .book-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px) rotateY(10deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .book-author {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Interactive Elements */
+        .mood-tracker {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .mood-title {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mood-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.5rem;
+        }
+
+        .mood-option:hover {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .mood-option.selected {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Editor Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(110, 72, 170, 0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .editor-title {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #2a2a2a;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(110, 72, 170, 0.5);
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* Reading Mode */
+        .reading-mode {
+            background-color: #f5f5dc;
+            color: #333;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .reading-mode .note-content {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .reading-mode .note-header {
+            color: #222;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Themes */
+        .theme-selector {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .notes-grid, .ai-resources, .books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .mood-options {
+                gap: 10px;
+            }
+
+            .mood-option {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .note-card {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Kindle-like reading mode toggle */
+        .reading-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .reading-mode-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Typewriter Effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 2px;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary); }
+        }
+
+        /* 3D Cube */
+        .cube-container {
+            width: 100px;
+            height: 100px;
+            margin: 30px auto;
+            perspective: 1000px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 15s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(110, 72, 170, 0.7);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .cube-face.front { transform: translateZ(50px); }
+        .cube-face.back { transform: rotateY(180deg) translateZ(50px); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(50px); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(50px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+        @keyframes rotate {
+            from { transform: rotateX(0) rotateY(0); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">Riyad's Thoughts</div>
+            <div class="header-actions">
+                <button class="btn btn-outline" id="exportBtn">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+                <button class="btn btn-outline" id="importBtn">
+                    <i class="fas fa-file-import"></i> Import
+                </button>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="diary">Diary</div>
+            <div class="nav-tab" data-tab="ai-resources">AI Resources</div>
+            <div class="nav-tab" data-tab="books">Reading List</div>
+            <div class="nav-tab" data-tab="playground">Playground</div>
+        </div>
+
+        <!-- Diary Tab -->
+        <div class="tab-content active" id="diary-tab">
+            <div class="mood-tracker">
+                <h3 class="mood-title">How are you feeling today?</h3>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="happy" title="Happy">😊</div>
+                    <div class="mood-option" data-mood="excited" title="Excited">😃</div>
+                    <div class="mood-option" data-mood="neutral" title="Neutral">😐</div>
+                    <div class="mood-option" data-mood="sad" title="Sad">😔</div>
+                    <div class="mood-option" data-mood="angry" title="Angry">😠</div>
+                    <div class="mood-option" data-mood="tired" title="Tired">😴</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="addNoteBtn">
+                    <i class="fas fa-plus"></i> New Entry
+                </button>
+                <div class="search-container" style="flex-grow: 1;">
+                    <input type="text" id="searchInput" class="form-input" placeholder="Search entries...">
+                </div>
+            </div>
+
+            <div class="notes-grid" id="notesContainer">
+                <!-- Notes will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- AI Resources Tab -->
+        <div class="tab-content" id="ai-resources-tab">
+            <h2>AI Companions</h2>
+            <p>Explore these powerful AI tools to enhance your thinking and creativity</p>
+            
+            <div class="ai-resources">
+                <div class="ai-category">
+                    <h3><i class="fas fa-robot"></i> Conversational AI</h3>
+                    <ul class="ai-list">
+                        <li class="ai-item">
+                            <a href="https://chat.openai.com" target="_blank" class="ai-link">
+                                <i class="fas fa-comment-dots"></i> ChatGPT
+                                <span class="ai-desc">General purpose assistant</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://deepseek.com" target="_blank" class="ai-link">
+                                <i class="fas fa-brain"></i> DeepSeek
+                                <span class="ai-desc">Advanced reasoning</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://gemini.google.com" target="_blank" class="ai-link">
+                                <i class="fab fa-google"></i> Gemini
+                                <span class="ai-desc">Google's AI assistant</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://claude.ai" target="_blank" class="ai-link">
+                                <i class="fas fa-leaf"></i> Claude
+                                <span class="ai-desc">Context-aware AI</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="ai-category">
+                    <h3><i class="fas fa-image"></i> Creative AI</h3>
+                    <ul class="ai-list">
+                        <li class="ai-item">
+                            <a href="https://openai.com/dall-e" target="_blank" class="ai-link">
+                                <i class="fas fa-palette"></i> DALL-E
+                                <span class="ai-desc">Image generation</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://stability.ai" target="_blank" class="ai-link">
+                                <i class="fas fa-magic"></i> Stable Diffusion
+                                <span class="ai-desc">Open image generation</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://www.midjourney.com" target="_blank" class="ai-link">
+                                <i class="fas fa-camera-retro"></i> Midjourney
+                                <span class="ai-desc">Artistic images</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://www.suno.ai" target="_blank" class="ai-link">
+                                <i class="fas fa-music"></i> Suno AI
+                                <span class="ai-desc">Music generation</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="ai-category">
+                    <h3><i class="fas fa-code"></i> Developer AI</h3>
+                    <ul class="ai-list">
+                        <li class="ai-item">
+                            <a href="https://github.com/features/copilot" target="_blank" class="ai-link">
+                                <i class="fas fa-code-branch"></i> GitHub Copilot
+                                <span class="ai-desc">Code completion</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://www.phind.com" target="_blank" class="ai-link">
+                                <i class="fas fa-search"></i> Phind
+                                <span class="ai-desc">Technical search</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://www.cursor.sh" target="_blank" class="ai-link">
+                                <i class="fas fa-terminal"></i> Cursor
+                                <span class="ai-desc">AI-first IDE</span>
+                            </a>
+                        </li>
+                        <li class="ai-item">
+                            <a href="https://replit.com" target="_blank" class="ai-link">
+                                <i class="fas fa-laptop-code"></i> Replit
+                                <span class="ai-desc">Cloud coding</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Tab -->
+        <div class="tab-content" id="books-tab">
+            <h2>Reading List</h2>
+            <p>Expand your mind with these thought-provoking books</p>
+            
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="Sapiens" class="book-cover">
+                    <h3 class="book-title">Sapiens</h3>
+                    <p class="book-author">Yuval Noah Harari</p>
+                </div>
+                
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="Atomic Habits" class="book-cover">
+                    <h3 class="book-title">Atomic Habits</h3>
+                    <p class="book-author">James Clear</p>
+                </div>
+                
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="The Alchemist" class="book-cover">
+                    <h3 class="book-title">The Alchemist</h3>
+                    <p class="book-author">Paulo Coelho</p>
+                </div>
+                
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="Deep Work" class="book-cover">
+                    <h3 class="book-title">Deep Work</h3>
+                    <p class="book-author">Cal Newport</p>
+                </div>
+                
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="Thinking, Fast and Slow" class="book-cover">
+                    <h3 class="book-title">Thinking, Fast and Slow</h3>
+                    <p class="book-author">Daniel Kahneman</p>
+                </div>
+                
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71X1p4TGlxL._AC_UF1000,1000_QL80_.jpg" alt="The Psychology of Money" class="book-cover">
+                    <h3 class="book-title">The Psychology of Money</h3>
+                    <p class="book-author">Morgan Housel</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Playground Tab -->
+        <div class="tab-content" id="playground-tab">
+            <h2>Creative Playground</h2>
+            <p>Experiment and play with these interactive elements</p>
+            
+            <div class="cube-container">
+                <div class="cube">
+                    <div class="cube-face front">R</div>
+                    <div class="cube-face back">I</div>
+                    <div class="cube-face right">Y</div>
+                    <div class="cube-face left">A</div>
+                    <div class="cube-face top">D</div>
+                    <div class="cube-face bottom">!</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn btn-primary" id="typewriterBtn">
+                    <i class="fas fa-keyboard"></i> Generate Random Thought
+                </button>
+                <div id="typewriterOutput" style="margin-top: 20px; font-size: 1.2rem; min-height: 60px;"></div>
+            </div>
+            
+            <div style="background-color: var(--card-bg); padding: 20px; border-radius: 10px; text-align: center;">
+                <h3>Daily Inspiration</h3>
+                <p id="dailyQuote" style="font-style: italic; margin: 15px 0;">Loading quote...</p>
+                <button class="btn btn-outline" id="newQuoteBtn">
+                    <i class="fas fa-sync-alt"></i> New Quote
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editor Modal -->
+    <div class="modal" id="editorModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="editor-title" id="modalTitle">New Diary Entry</h2>
+            <div class="form-group">
+                <label for="noteTitle" class="form-label">Title</label>
+                <input type="text" id="noteTitle" class="form-input" placeholder="Entry title">
+            </div>
+            <div class="form-group">
+                <label for="noteContent" class="form-label">Content</label>
+                <textarea id="noteContent" class="form-input form-textarea" placeholder="Write your thoughts here..."></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" id="saveNoteBtn">
+                    <i class="fas fa-save"></i> Save Entry
+                </button>
+                <button class="btn btn-danger" id="deleteNoteBtn" style="display: none;">
+                    <i class="fas fa-trash"></i> Delete Entry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reading Mode Toggle -->
+    <div class="reading-mode-toggle" id="readingModeToggle">
+        <i class="fas fa-book-open"></i>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+        <div class="theme-btn" style="background: #121212;" data-theme="dark"></div>
+        <div class="theme-btn" style="background: #f5f5f5;" data-theme="light"></div>
+        <div class="theme-btn" style="background: #1a2a3a;" data-theme="blue"></div>
+        <div class="theme-btn" style="background: #2a1a3a;" data-theme="purple"></div>
+    </div>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#6e48aa"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#6e48aa",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+            // DOM Elements
+            const notesContainer = document.getElementById('notesContainer');
+            const addNoteBtn = document.getElementById('addNoteBtn');
+            const editorModal = document.getElementById('editorModal');
+            const closeModal = document.getElementById('closeModal');
+            const saveNoteBtn = document.getElementById('saveNoteBtn');
+            const deleteNoteBtn = document.getElementById('deleteNoteBtn');
+            const noteTitle = document.getElementById('noteTitle');
+            const noteContent = document.getElementById('noteContent');
+            const searchInput = document.getElementById('searchInput');
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const readingModeToggle = document.getElementById('readingModeToggle');
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const moodOptions = document.querySelectorAll('.mood-option');
+            const typewriterBtn = document.getElementById('typewriterBtn');
+            const typewriterOutput = document.getElementById('typewriterOutput');
+            const dailyQuote = document.getElementById('dailyQuote');
+            const newQuoteBtn = document.getElementById('newQuoteBtn');
+
+            // State
+            let notes = [];
+            let currentNoteId = null;
+            let isReadingMode = false;
+            let currentMood = null;
+
+            // Quotes database
+            const quotes = [
+                "The only way to do great work is to love what you do. — Steve Jobs",
+                "Innovation distinguishes between a leader and a follower. — Steve Jobs",
+                "Your time is limited, so don't waste it living someone else's life. — Steve Jobs",
+                "Stay hungry, stay foolish. — Steve Jobs",
+                "The future belongs to those who believe in the beauty of their dreams. — Eleanor Roosevelt",
+                "Success is not final, failure is not fatal: It is the courage to continue that counts. — Winston Churchill",
+                "Life is what happens when you're busy making other plans. — John Lennon",
+                "The only impossible journey is the one you never begin. — Tony Robbins",
+                "In the middle of difficulty lies opportunity. — Albert Einstein",
+                "Do not watch the clock. Do what it does. Keep going. — Sam Levenson"
+            ];
+
+            // Random thoughts for typewriter
+            const randomThoughts = [
+                "What if our dreams are just memories from parallel universes?",
+                "The internet is humanity's collective consciousness taking form.",
+                "Every decision creates a new branch in the timeline of reality.",
+                "Artificial intelligence might be the next step in human evolution.",
+                "The universe could be a simulation, but does it matter if we can't tell?",
+                "Time is the only resource we can't renew, yet we waste it so carelessly.",
+                "The most revolutionary ideas often seem absurd at first.",
+                "Our perception of reality is limited by our biological sensors.",
+                "What if consciousness is fundamental and matter emerges from it?",
+                "The future is already here — it's just not evenly distributed."
+            ];
+
+            // Initialize
+            loadNotes();
+            renderNotes();
+            updateQuote();
+            setupTabNavigation();
+
+            // Event Listeners
+            addNoteBtn.addEventListener('click', openNewNote);
+            closeModal.addEventListener('click', closeEditor);
+            saveNoteBtn.addEventListener('click', saveNote);
+            deleteNoteBtn.addEventListener('click', deleteNote);
+            searchInput.addEventListener('input', filterNotes);
+            exportBtn.addEventListener('click', exportNotes);
+            importBtn.addEventListener('click', importNotes);
+            readingModeToggle.addEventListener('click', toggleReadingMode);
+            
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', () => changeTheme(btn.dataset.theme));
+            });
+
+            moodOptions.forEach(option => {
+                option.addEventListener('click', () => setMood(option));
+            });
+
+            typewriterBtn.addEventListener('click', generateRandomThought);
+            newQuoteBtn.addEventListener('click', updateQuote);
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === editorModal) {
+                    closeEditor();
+                }
+            });
+
+            // Functions
+            function setupTabNavigation() {
+                navTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs
+                        navTabs.forEach(t => t.classList.remove('active'));
+                        tabContents.forEach(c => c.classList.remove('active'));
+                        
+                        // Add active class to clicked tab
+                        tab.classList.add('active');
+                        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                    });
+                });
+            }
+
+            function loadNotes() {
+                const savedNotes = localStorage.getItem('riyadsThoughtsNotes');
+                if (savedNotes) {
+                    notes = JSON.parse(savedNotes);
+                }
+            }
+
+            function saveNotes() {
+                localStorage.setItem('riyadsThoughtsNotes', JSON.stringify(notes));
+            }
+
+            function renderNotes(filter = '') {
+                notesContainer.innerHTML = '';
+                
+                const filteredNotes = filter 
+                    ? notes.filter(note => 
+                        note.title.toLowerCase().includes(filter.toLowerCase()) || 
+                        note.content.toLowerCase().includes(filter.toLowerCase()))
+                    : notes;
+                
+                // Sort by date (newest first)
+                filteredNotes.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                filteredNotes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'note-card';
+                    noteElement.innerHTML = `
+                        <div class="note-header">${note.title}</div>
+                        <div class="note-date">${formatDate(note.date)}</div>
+                        <div class="note-content">${truncateContent(note.content)}</div>
+                        <div class="note-actions">
+                            <button class="action-btn edit-btn" data-id="${note.id}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn read-btn" data-id="${note.id}">
+                                <i class="fas fa-book-open"></i> Read
+                            </button>
+                        </div>
+                    `;
+                    notesContainer.appendChild(noteElement);
+                });
+                
+                // Add event listeners to dynamically created buttons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', () => openExistingNote(btn.dataset.id));
+                });
+                
+                document.querySelectorAll('.read-btn').forEach(btn => {
+                    btn.addEventListener('click', () => openReadingMode(btn.dataset.id));
+                });
+            }
+
+            function openNewNote() {
+                currentNoteId = null;
+                noteTitle.value = '';
+                noteContent.value = '';
+                deleteNoteBtn.style.display = 'none';
+                document.getElementById('modalTitle').textContent = 'New Diary Entry';
+                editorModal.style.display = 'flex';
+                noteTitle.focus();
+            }
+
+            function openExistingNote(id) {
+                const note = notes.find(n => n.id === id);
+                if (note) {
+                    currentNoteId = id;
+                    noteTitle.value = note.title;
+                    noteContent.value = note.content;
+                    deleteNoteBtn.style.display = 'inline-block';
+                    document.getElementById('modalTitle').textContent = 'Edit Entry';
+                    editorModal.style.display = 'flex';
+                    noteTitle.focus();
+                }
+            }
+
+            function openReadingMode(id) {
+                const note = notes.find(n => n.id === id);
+                if (note) {
+                    const readingContent = `
+                        <div class="container reading-mode">
+                            <h1>${note.title}</h1>
+                            <div class="note-date">${formatDate(note.date, true)}</div>
+                            <div class="note-content">${formatContent(note.content)}</div>
+                            <button class="btn btn-primary" id="closeReadingMode" style="margin-top: 30px;">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    `;
+                    
+                    const readingDiv = document.createElement('div');
+                    readingDiv.id = 'readingMode';
+                    readingDiv.innerHTML = readingContent;
+                    document.body.appendChild(readingDiv);
+                    isReadingMode = true;
+                    
+                    document.getElementById('closeReadingMode').addEventListener('click', closeReadingMode);
+                }
+            }
+
+            function closeReadingMode() {
+                const readingDiv = document.getElementById('readingMode');
+                if (readingDiv) {
+                    readingDiv.remove();
+                    isReadingMode = false;
+                }
+            }
+
+            function toggleReadingMode() {
+                if (isReadingMode) {
+                    closeReadingMode();
+                } else {
+                    // Open reading mode for the most recent note
+                    if (notes.length > 0) {
+                        openReadingMode(notes[0].id);
+                    }
+                }
+            }
+
+            function closeEditor() {
+                editorModal.style.display = 'none';
+            }
+
+            function saveNote() {
+                const title = noteTitle.value.trim();
+                const content = noteContent.value.trim();
+                
+                if (!title || !content) {
+                    alert('Please fill in both title and content');
+                    return;
+                }
+                
+                const now = new Date();
+                
+                if (currentNoteId) {
+                    // Update existing note
+                    const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+                    if (noteIndex > -1) {
+                        notes[noteIndex] = {
+                            ...notes[noteIndex],
+                            title,
+                            content,
+                            date: now.toISOString(),
+                            mood: currentMood
+                        };
+                    }
+                } else {
+                    // Create new note
+                    const newNote = {
+                        id: generateId(),
+                        title,
+                        content,
+                        date: now.toISOString(),
+                        mood: currentMood
+                    };
+                    notes.unshift(newNote); // Add to beginning
+                }
+                
+                saveNotes();
+                renderNotes();
+                closeEditor();
+                currentMood = null;
+                resetMoodOptions();
+            }
+
+            function deleteNote() {
+                if (confirm('Are you sure you want to delete this entry?')) {
+                    notes = notes.filter(n => n.id !== currentNoteId);
+                    saveNotes();
+                    renderNotes();
+                    closeEditor();
+                }
+            }
+
+            function filterNotes() {
+                renderNotes(searchInput.value);
+            }
+
+            function exportNotes() {
+                const dataStr = JSON.stringify(notes, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `riyads-thoughts-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+
+            function importNotes() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                
+                input.onchange = e => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = event => {
+                        try {
+                            const importedNotes = JSON.parse(event.target.result);
+                            if (Array.isArray(importedNotes)) {
+                                if (confirm(`Import ${importedNotes.length} notes? This will replace your current notes.`)) {
+                                    notes = importedNotes;
+                                    saveNotes();
+                                    renderNotes();
+                                }
+                            } else {
+                                alert('Invalid file format');
+                            }
+                        } catch (error) {
+                            alert('Error reading file: ' + error.message);
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                };
+                
+                input.click();
+            }
+
+            function setMood(option) {
+                // Reset all mood options
+                moodOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.style.transform = '';
+                    opt.style.boxShadow = '';
+                });
+                
+                // Set selected mood
+                option.classList.add('selected');
+                currentMood = option.dataset.mood;
+                
+                // Visual feedback
+                option.style.transform = 'scale(1.3)';
+                option.style.boxShadow = `0 0 15px ${getMoodColor(currentMood)}`;
+                
+                // Add to current note if editing
+                if (currentNoteId) {
+                    const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+                    if (noteIndex > -1) {
+                        notes[noteIndex].mood = currentMood;
+                    }
+                }
+            }
+
+            function resetMoodOptions() {
+                moodOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.style.transform = '';
+                    opt.style.boxShadow = '';
+                });
+            }
+
+            function getMoodColor(mood) {
+                const colors = {
+                    'happy': '#4caf50',
+                    'excited': '#ff9800',
+                    'neutral': '#9e9e9e',
+                    'sad': '#2196f3',
+                    'angry': '#f44336',
+                    'tired': '#673ab7'
+                };
+                return colors[mood] || '#6e48aa';
+            }
+
+            function changeTheme(theme) {
+                document.body.className = theme;
+                
+                // Update theme colors
+                if (theme === 'light') {
+                    document.documentElement.style.setProperty('--bg', '#f5f5f5');
+                    document.documentElement.style.setProperty('--text', '#333');
+                    document.documentElement.style.setProperty('--card-bg', '#ffffff');
+                } else if (theme === 'blue') {
+                    document.documentElement.style.setProperty('--bg', '#1a2a3a');
+                    document.documentElement.style.setProperty('--text', '#e0e0e0');
+                    document.documentElement.style.setProperty('--card-bg', '#243a4f');
+                } else if (theme === 'purple') {
+                    document.documentElement.style.setProperty('--bg', '#2a1a3a');
+                    document.documentElement.style.setProperty('--text', '#e0e0e0');
+                    document.documentElement.style.setProperty('--card-bg', '#3a2a4a');
+                } else { // dark (default)
+                    document.documentElement.style.setProperty('--bg', '#121212');
+                    document.documentElement.style.setProperty('--text', '#e0e0e0');
+                    document.documentElement.style.setProperty('--card-bg', '#1e1e1e');
+                }
+            }
+
+            function generateRandomThought() {
+                const thought = randomThoughts[Math.floor(Math.random() * randomThoughts.length)];
+                typewriterOutput.innerHTML = '';
+                typewriterOutput.classList.add('typewriter');
+                typewriterOutput.textContent = thought;
+                
+                // Remove typewriter effect after animation completes
+                setTimeout(() => {
+                    typewriterOutput.classList.remove('typewriter');
+                }, 3500);
+            }
+
+            function updateQuote() {
+                const quote = quotes[Math.floor(Math.random() * quotes.length)];
+                dailyQuote.textContent = quote;
+            }
+
+            // Helper functions
+            function generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            function formatDate(dateString, full = false) {
+                const date = new Date(dateString);
+                if (full) {
+                    return date.toLocaleString();
+                }
+                return date.toLocaleDateString();
+            }
+
+            function truncateContent(content) {
+                const maxLength = 200;
+                return content.length > maxLength 
+                    ? content.substring(0, maxLength) + '...' 
+                    : content;
+            }
+
+            function formatContent(content) {
+                // Simple formatting - replace newlines with paragraphs
+                return content.split('\n').map(para => `<p>${para}</p>`).join('');
+            }
+        });
+    </script>
+</body>
+</html>
